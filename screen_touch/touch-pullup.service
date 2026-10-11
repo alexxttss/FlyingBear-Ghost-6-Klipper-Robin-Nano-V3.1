@@ -1,0 +1,13 @@
+[Unit]
+Description=Enable Hardware Pull-ups for Touchscreen (PC8 and PH9)
+DefaultDependencies=no
+After=local-fs.target
+Before=KlipperScreen.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/bin/enable-touch-pullup.py
+RemainAfterExit=yes
+
+[Install]
+WantedBy=basic.target

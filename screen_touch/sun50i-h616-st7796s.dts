@@ -1,0 +1,53 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "allwinner,sun50i-h616";
+
+    fragment@0 {
+        target-path = "/soc/spi@5011000";
+        __overlay__ {
+            status = "okay";
+            num-cs = <2>;
+
+            cs-gpios = <&pio 7 9 0>,   /* PH9  TOUCH_CS */
+                       <&pio 2 10 0>; /* PC10 TFT_CS */
+
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            st7796: st7796s@1 {
+                compatible = "sitronix,st7796s";
+                reg = <1>;
+                spi-max-frequency = <10000000>;
+                buswidth = <8>;
+                fps = <33>;
+                txbuflen = <8192>;
+                reset-gpios = <&pio 2 6 1>; /* PC6 */
+                dc-gpios    = <&pio 2 5 0>; /* PC5 */
+                rotate = <270>;
+            };
+
+            ads7846: ads7846@0 {
+                compatible = "ti,ads7846";
+                reg = <0>;
+                spi-max-frequency = <1000000>;
+
+                interrupt-parent = <&pio>;
+                interrupts = <2 8 2>;        /* PC8 FALLING EDGE */
+                pendown-gpio = <&pio 2 8 1>; /* PC8 active low */
+
+                ti,x-min = /bits/ 16 <0>;
+                ti,y-min = /bits/ 16 <0>;
+                ti,x-max = /bits/ 16 <4095>;
+                ti,y-max = /bits/ 16 <4095>;
+                ti,pressure-min = /bits/ 16 <0>;
+                ti,pressure-max = /bits/ 16 <65535>;
+                ti,x-plate-ohms = /bits/ 16 <400>;
+                ti,settle-delay-usec = /bits/ 16 <150>;
+                ti,penirq-recheck-delay-usecs = /bits/ 16 <100>;
+                ti,swap-xy = <0>;
+            };
+        };
+    };
+};

@@ -1,0 +1,15 @@
+[Unit]
+Description=Touchscreen XPT2046 Auto-Rearm Watchdog
+After=KlipperScreen.service
+Wants=KlipperScreen.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/local/bin/touch-watchdog.py
+Restart=always
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
